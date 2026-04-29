@@ -47,7 +47,7 @@ import streamlit as st
 # 0. PAGE CONFIG
 # ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="Опросник уровня стресса у собак",
+    page_title="Dog Stress Level Questionnaire",
     page_icon="🐾",
     layout="centered",
 )
@@ -304,8 +304,8 @@ def get_gh_options(dog_sex: str) -> List[Tuple[int, str]]:
     "Предпочитаю не отвечать" / unknown -> show both sex-specific questions.
     """
     sex = dog_sex.lower() if dog_sex else ""
-    known_female = sex in ("female", "f", "сука")
-    known_male = sex in ("male", "m", "кобель")
+    known_female = sex in ("female", "f", "сука", "женский")
+    known_male = sex in ("male", "m", "кобель", "мужской")
     unknown = not (known_female or known_male)
     result = []
     for code, lbl in GH_OPTIONS_ALL:
@@ -890,7 +890,7 @@ def render_supabase_diagnostics() -> None:
 
 
 def screen_intro() -> None:
-    st.markdown(f"## {c('screen_intro_title', 'Опросник уровня стресса у собак (DSLQ)')}")
+    st.markdown(f"## {c('screen_intro_title', 'Dog Stress Level Questionnaire')}")
     st.markdown(c("screen_intro_body"))
     st.info(f"⏱ {c('screen_intro_time')}")
     st.markdown(f"**{c('screen_intro_single_dog')}**")
@@ -903,20 +903,20 @@ def screen_intro() -> None:
 
 def screen_sex_select() -> None:
     st.markdown(
-        '<p class="dslq-question">Перед началом: какой пол у вашей собаки?</p>'
-        '<p class="dslq-section-label">Это помогает показать только релевантные вопросы.</p>',
+        '<p class="dslq-question">Пол вашей собаки?</p>',
         unsafe_allow_html=True,
     )
 
-    sex_options = ["Кобель", "Сука", "Не знаю / предпочитаю не отвечать"]
+    sex_options = ["Мужской", "Женский", "Не знаю / предпочитаю не отвечать"]
     sex = st.radio(
-        "Выберите один вариант:",
+        "Пол вашей собаки?",
         options=sex_options,
         index=sex_options.index(st.session_state["dog_sex"])
         if st.session_state["dog_sex"] in sex_options
         else None,
         horizontal=True,
         key="sex_radio",
+        label_visibility="collapsed",
     )
 
     st.markdown("")
@@ -1354,7 +1354,7 @@ def screen_demographics() -> None:
 
     with st.form("demo_form"):
         if share_q:
-            st.markdown(f"### {c('dog_demo_title', 'Необязательная информация о собаке')}")
+            st.markdown(f"### {c('dog_demo_title', 'Информация о собаке')}")
             dog_rows = OPTIONAL_DF[
                 OPTIONAL_DF["section"] == "dog_demographics_optional"
             ].sort_values("display_order")
@@ -1401,7 +1401,7 @@ def screen_demographics() -> None:
                     dog_demo[f"{fk}_txt"] = extra
 
         if share_d:
-            st.markdown(f"### {c('human_demo_title', 'Необязательная информация о человеке')}")
+            st.markdown(f"### {c('human_demo_title', 'Информация о человеке')}")
             # future_contact is collected on the contact screen (choices), not in human_demo.
             fut_yes = bool(choices.get("future_contact"))
             act_yes = hum_demo.get("human_dog_activity") in ("Yes", "Да")
@@ -1445,6 +1445,7 @@ def screen_demographics() -> None:
                         options=opts,
                         default=hum_demo.get(fk, []),
                         key=f"hd_{fk}",
+                        placeholder="Выберите из списка",
                     )
                 elif rtype == "single_select_plus_multiselect":
                     opts = [o.strip() for o in str(f["options_pipe_delimited"]).split("|")]

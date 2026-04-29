@@ -1,13 +1,13 @@
 question_number,short_label,question_text,response_type,followup_block,include_in_primary_score,notes
 1,Стереотипные движения,"Моя собака делает стереотипные (повторяющиеся) движения 10 минут подряд или дольше — например, гоняется за своим хвостом, ходит туда-сюда или кругами, вылизывает или сосет игрушки или другие предметы вне игры, разлизывает или грызет себя до появления ран, или делает что-то похожее.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
-2,Одышка/частое дыхание,"Моя собака тяжело дышит или часто дышит с открытой пастью в ситуациях, которые не связаны с физической нагрузкой, активной игрой или жарой.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
+2,Одышка/частое дыхание,"Моя собака тяжело или часто дышит с открытой пастью в ситуациях, которые не связаны с физической нагрузкой, активной игрой или жарой.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 3,Игра со знакомыми людьми,"Моя собака играет или дружески общается с большинством знакомых людей без признаков тревоги, страха или агрессии.",binary_protective,yes_no_only,yes,Protective / positive item. Converted to 0/1 score in existing scoring pipeline.
 4,Дрожь/напряжение,"Иногда моя собака дрожит или выглядит так, будто ее мышцы слишком напряжены.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 5,Концентрация,"Моей собаке трудно концентрироваться на одной задаче — например, во время обучения или игры.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 6,Зуд,"Моя собака чешется, лижет или грызет лапы, хвост или другие части тела и/или разлизывает себя до проплешин или ранок.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 7,Мочеиспускание дома,Моя собака писает дома (не на пеленку и не в лоток).,symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 8,Дефекация дома,Моя собака испражняется дома (не на пеленку и не в лоток).,symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
-9,Беспокойство,Моя собака беспокойна: ей как будто трудно найти удобное место для отдыха или оставаться в удобном положении.,symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
+9,Беспокойство,Моя собака беспокойна: ей как будто трудно найти удобное место для отдыха или оставаться в одном положении.,symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 10,Игра с собаками,"Моя собака играет или дружески общается с большинством других собак без признаков тревоги, страха или агрессии.",binary_protective,yes_no_only,yes,Protective / positive item. Converted to 0/1 score in existing scoring pipeline.
 11,Тревожность,Моя собака тревожная.,symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 12,Щелканье пастью в воздухе,"Моя собака кусает воздух или щелкает пастью (""кусает невидимое"").",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
@@ -26,7 +26,7 @@ question_number,short_label,question_text,response_type,followup_block,include_i
 25,Замирание,В сложных для нее ситуациях моя собака может застыть на месте и какое-то время не двигаться.,symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 26,Странное поведение,Моя собака иногда ведет себя странно или непредсказуемо в знакомых ситуациях.,symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 27,Отказ от контакта,"Моя собака иногда отказывается от физического контакта со знакомыми людьми или собаками, даже если раньше ей нравилось с ними общаться.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
-28,Порча дома,"Моя собака портит полы, стены или мебель — например, грызет, царапает или копает дома.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
+28,Порча дома,"Моя собака портит (грызет, царапает) полы, стены или мебель.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 29,Отряхивание,"Моя собака отряхивается всем телом, как будто стряхивает воду, даже когда она не мокрая.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 30,Отворачивание головы,"Моя собака отворачивает голову и/или щурится, когда сталкивается с чем-то новым или потенциально неприятным для нее (не из-за яркого света).",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 31,Незнакомые собаки,Моя собака с интересом и позитивно взаимодействует с незнакомыми собаками.,binary_protective,yes_no_only,yes,Protective / positive item. Converted to 0/1 score in existing scoring pipeline.
@@ -35,4 +35,4 @@ question_number,short_label,question_text,response_type,followup_block,include_i
 34,Слюнотечение,"У моей собаки бывает заметное слюноотделение, не связанное с едой или лакомствами — особенно в новых или неприятных для нее ситуациях.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 35,Депрессивное поведение,"Моя собака показывает признаки депрессивного поведения: у нее мало энергии, она избегает общения или почти не интересуется занятиями, которые раньше ей нравились.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
 36,Плохой сон,"У моей собаки бывают трудности со сном: она часто просыпается ночью, долго не может уснуть, беспокойно отдыхает или спит меньше обычного.",symptom_block,yes_no_then_f_fw_l,yes,Scored with Main + f + f-w + l logic.
-37,Новые предметы,Моя собака охотно взаимодействует с новыми предметами и исследует их почти без нерешительности или страха.,binary_protective,yes_no_only,yes,Protective / positive item. Converted to 0/1 score in existing scoring pipeline.
+37,Новые предметы,"Моя собака охотно взаимодействует с новыми предметами и исследует их, не показывая заметной нерешительности или страха.",binary_protective,yes_no_only,yes,Protective / positive item. Converted to 0/1 score in existing scoring pipeline.
