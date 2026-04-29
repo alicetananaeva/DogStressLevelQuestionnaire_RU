@@ -27,6 +27,7 @@ DSLQ_RU_App/
 │   └── DSLQ_App_ScoringConfig.csv
 ├── .streamlit/
 │   └── secrets.toml.example
+├── SUPABASE_SCHEMA.sql
 ├── requirements.txt
 ├── DATA_PRIVACY.md
 ├── CHANGELOG.md
@@ -51,6 +52,8 @@ key = "your_supabase_anon_or_service_key"
 sessions_table = "dslq_ru_sessions"
 contacts_table = "dslq_ru_contacts"
 ```
+
+Файл `SUPABASE_SCHEMA.sql` содержит готовый шаблон для создания этих таблиц и insert-only RLS policies.
 
 ## Важно
 
