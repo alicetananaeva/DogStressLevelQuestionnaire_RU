@@ -1,0 +1,21 @@
+module,parameter,value,notes
+dslq_chronic,reference_sample_n,149,Unique dogs; earliest record per Dog_ID.
+dslq_chronic,items_in_primary_score,37 displayed scored items (31 symptom + 6 protective/play-new items),Per Doc6: primary score = chronic symptom severities (31 items with Main+f+f_w+l) plus 6 protective/play-new items (binary protective rule); supersedes prior 32-item note.
+dslq_chronic,mean,3.21,Current unique-dogs reference sample.
+dslq_chronic,sd,2.38,Current unique-dogs reference sample.
+dslq_chronic,median,2.67,Current unique-dogs reference sample.
+dslq_chronic,p75,4.67,Alternative percentile-based threshold option.
+dslq_chronic,p90,6.89,Alternative percentile-based threshold option.
+dslq_chronic,max_observed,10.11,Highest observed score in current unique-dogs reference sample.
+dslq_chronic,band_normal_upper,5.60,Mean + 1 SD; preferred v1 thresholding.
+dslq_chronic,band_elevated_upper,7.98,Mean + 2 SD; preferred v1 thresholding.
+dslq_chronic,band_high_upper,10.11,Up to highest observed score in current sample.
+dslq_chronic,band_ultra_high_rule,> 10.11,Use if score exceeds current observed maximum.
+dslq_chronic,banding_scheme_alt,Normal < 4.67; Elevated 4.67 to < 6.89; High >= 6.89,Alternative percentile-based scheme for later evaluation.
+health_related_signs,source_item,Question 41 General Health,Use only General Health for this module.
+health_related_signs,rule,Flag only if at least one General Health symptom is selected AND duration = Over a month ago,Keep separate from primary DSLQ Chronic score.
+health_related_signs,display,separate module under main result,Do not merge into primary score or band.
+runtime_key_aliases,gh_symptoms,Dog_Symptoms,"Optional-modules CSV field_key; map to canonical runtime/export key before scoring. Doc6."
+runtime_key_aliases,gh_length,Dog_Symptoms_Length,"Optional-modules CSV field_key; map to canonical runtime/export key before scoring. Doc6."
+visual,primary_result_visual,horizontal 3-zone scale with dog icon marker,Dog icon should be easier to notice than a dot.
+visual,health_visual,separate compact badge/card under primary result,Different visual language from main stress scale.

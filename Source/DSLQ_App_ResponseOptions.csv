@@ -1,0 +1,18 @@
+option_set,value,label
+yes_no,1,Да
+yes_no,2,Нет
+f_followup,1,Иногда
+f_followup,2,Часто
+f_followup,3,Постоянно
+f_followup,4,"Только в определенной ситуации или контексте (пожалуйста, опишите)"
+fw_followup,1,1 день
+fw_followup,2,2 дня
+fw_followup,3,3 дня
+fw_followup,4,4 дня
+fw_followup,5,5 дней
+fw_followup,6,6 дней
+fw_followup,7,7 дней
+fw_followup,8,Это происходит реже одного раза в неделю
+fw_followup,9,Я не знаю / бывает по-разному
+l_followup,1,Это началось меньше двух недель назад
+l_followup,2,Это началось больше двух недель назад
