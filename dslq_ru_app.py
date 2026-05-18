@@ -92,6 +92,8 @@ html, body, [data-testid="stAppViewContainer"] {
 .health-neutral  { background:#F0FDF4; color:#166534; padding:4px 14px; border-radius:20px; font-weight:600; font-size:0.85rem; display:inline-block; }
 .health-info     { background:#EFF6FF; color:#1D4ED8; padding:4px 14px; border-radius:20px; font-weight:600; font-size:0.85rem; display:inline-block; }
 .disclaimer { font-size:0.78rem; color:#8E8E93; line-height:1.5; margin-top:8px; }
+.result-note { font-size:1rem; color:#3A3A3C; line-height:1.55; margin-top:12px; }
+.result-note p { margin:0 0 8px 0; }
 .progress-label { font-size:0.8rem; color:#8E8E93; margin-bottom:2px; }
 </style>
 """,
@@ -1284,13 +1286,13 @@ def screen_result() -> None:
     render_supabase_diagnostics()
 
     st.markdown(
-        f'<p class="disclaimer">{c("result_disclaimer", "Этот инструмент предназначен для скрининга и не является клиническим диагнозом.")}</p>',
+        f'<div class="result-note"><p><em>{c("result_disclaimer", "Этот инструмент предназначен для скрининга и не является клиническим диагнозом.")}</em></p></div>',
         unsafe_allow_html=True,
     )
     st.markdown(
         """
-        <div class="disclaimer">
-            <p>Dog Stress Level Questionnaire был разработан и валидирован Alice Tananaeva в Human-Animal Interaction Lab, Oregon State University.</p>
+        <div class="result-note">
+            <p><em>Dog Stress Level Questionnaire был разработан и валидирован Alice Tananaeva в Human-Animal Interaction Lab, Oregon State University.</em></p>
             <p><strong>Узнать больше или обсудить сотрудничество:</strong><br>
             <a href="https://www.alicetananaeva.com" target="_blank">www.alicetananaeva.com</a><br>
             <a href="https://thehumananimalbond.com/" target="_blank">thehumananimalbond.com</a></p>
