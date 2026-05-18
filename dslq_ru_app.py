@@ -1287,6 +1287,17 @@ def screen_result() -> None:
         f'<p class="disclaimer">{c("result_disclaimer", "Этот инструмент предназначен для скрининга и не является клиническим диагнозом.")}</p>',
         unsafe_allow_html=True,
     )
+    st.markdown(
+        """
+        <div class="disclaimer">
+            <p>Dog Stress Level Questionnaire был разработан и валидирован Alice Tananaeva в Human-Animal Interaction Lab, Oregon State University.</p>
+            <p><strong>Узнать больше или обсудить сотрудничество:</strong><br>
+            <a href="https://www.alicetananaeva.com" target="_blank">www.alicetananaeva.com</a><br>
+            <a href="https://thehumananimalbond.com/" target="_blank">thehumananimalbond.com</a></p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     col_back, col_next = st.columns([1, 2])
     if col_back.button("<- Назад", key="result_back"):
