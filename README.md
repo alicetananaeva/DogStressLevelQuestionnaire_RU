@@ -40,8 +40,7 @@ DSLQ_RU_App/
 
 | Table | Contents |
 |---|---|
-| `dslq_ru_sessions` | Исследовательские записи при согласии на передачу анкетных и/или демографических данных |
-| `dslq_ru_contacts` | Контактные данные для будущих исследований, если участник отдельно согласился на связь |
+| `dslq_ru_sessions` | Исследовательские записи при согласии на передачу ответов и информации о собаке |
 
 В Streamlit Secrets:
 
@@ -50,10 +49,9 @@ DSLQ_RU_App/
 url = "your_supabase_url"
 key = "your_supabase_anon_or_service_key"
 sessions_table = "dslq_ru_sessions"
-contacts_table = "dslq_ru_contacts"
 ```
 
-Файл `SUPABASE_SCHEMA.sql` содержит готовый шаблон для создания этих таблиц и insert-only RLS policies.
+Файл `SUPABASE_SCHEMA.sql` содержит готовый шаблон для создания таблицы и insert-only RLS policy.
 
 ## Важно
 
