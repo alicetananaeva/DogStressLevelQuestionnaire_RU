@@ -211,6 +211,44 @@ def build_scoring_thresholds(_df: pd.DataFrame) -> Dict[str, float]:
 # Load everything once
 _DATA = load_all_csvs()
 COPY = build_copy_map(_DATA["copy"])
+COPY.update(
+    {
+        "result_band_normal": (
+            "Уровень хронического стресса вашей собаки находится в пределах нормы "
+            "относительно текущей референсной выборки. Это не исключает стресс в "
+            "отдельных ситуациях, но говорит о том, что в целом признаки "
+            "хронического стресса не повышены по сравнению с другими собаками, "
+            "уже оцененными с помощью этого опросника на сегодняшний день."
+        ),
+        "result_band_elevated": (
+            "Уровень хронического стресса вашей собаки повышен относительно "
+            "текущей референсной выборки: балл немного выше среднего балла собак, "
+            "уже оцененных с помощью этого опросника на сегодняшний день. "
+            "Возможно, стоит внимательнее посмотреть на ежедневный режим вашей "
+            "собаки, среду, здоровье и возможности удовлетворять важные "
+            "потребности. Если опасения сохраняются, полезна консультация "
+            "квалифицированного специалиста по поведению или благополучию собак."
+        ),
+        "result_band_high": (
+            "Уровень хронического стресса вашей собаки высокий относительно "
+            "текущей референсной выборки: балл выше среднего балла собак, уже "
+            "оцененных с помощью этого опросника на сегодняшний день. Особенно "
+            "важно пересмотреть ежедневный режим вашей собаки, среду, здоровье и "
+            "возможности удовлетворять важные потребности, а также обсудить "
+            "опасения с квалифицированным специалистом по поведению или "
+            "благополучию собак."
+        ),
+        "result_band_ultra_high": (
+            "Уровень хронического стресса вашей собаки выше, чем у большинства "
+            "собак, и соответствует или превышает самые высокие значения, "
+            "наблюдавшиеся в текущей референсной выборке. Настоятельно "
+            "рекомендуется обсудить возможные источники стресса с ветеринарным "
+            "врачом, а также рассмотреть отмеченные поведения и ежедневные занятия "
+            "вашей собаки с квалифицированным специалистом по поведению или "
+            "благополучию собак."
+        ),
+    }
+)
 OPT_SETS = build_option_sets(_DATA["options"])
 THRESHOLDS = build_scoring_thresholds(_DATA["config"])
 BEHAVIOR_DF = _DATA["behavior"].sort_values("question_number").reset_index(drop=True)
@@ -469,6 +507,7 @@ def compute_score(answers: Dict[str, Any]) -> ScoreResult:
 STORAGE_MODE = "supabase"  # "none" | "local" | "supabase"
 APP_VERSION = "ru-v1"
 DEFAULT_SESSIONS_TABLE = "dslq_ru_sessions"
+DEFAULT_CONTACTS_TABLE = "dslq_ru_contacts"
 
 
 def _set_supabase_diag(error: Optional[str], traceback_text: Optional[str]) -> None:
@@ -481,6 +520,23 @@ def _set_supabase_diag(error: Optional[str], traceback_text: Optional[str]) -> N
         st.session_state["supabase_traceback"] = str(traceback_text)
     else:
         st.session_state["supabase_traceback"] = None
+
+
+def _set_supabase_contact_diag(error: Optional[str], traceback_text: Optional[str]) -> None:
+    """Persist Supabase contact-table diagnostics in session state."""
+    if error:
+        st.session_state["supabase_contact_error"] = str(error)
+    else:
+        st.session_state["supabase_contact_error"] = None
+    if traceback_text:
+        st.session_state["supabase_contact_traceback"] = str(traceback_text)
+    else:
+        st.session_state["supabase_contact_traceback"] = None
+
+
+def _is_valid_email_simple(email: str) -> bool:
+    e = str(email or "").strip()
+    return " " not in e and "@" in e and "." in e.split("@")[-1]
 
 
 def _supabase_insert(payload: Dict[str, Any]) -> bool:
@@ -581,10 +637,99 @@ def persist_session(payload: Dict[str, Any]) -> Optional[Path]:
         return None
 
 
+def _supabase_insert_contact(payload: Dict[str, Any]) -> bool:
+    """Insert one contact record into Supabase; contact data stays separate."""
+    try:
+        import urllib.error
+        import urllib.request
+
+        secrets = st.secrets["supabase"]
+        table = secrets.get("contacts_table", DEFAULT_CONTACTS_TABLE)
+        url = secrets["url"].rstrip("/") + f"/rest/v1/{table}"
+        key = secrets["key"]
+
+        contact = payload.get("contact_details") or {}
+        record = {
+            "session_id": payload.get("session_id"),
+            "created_at": payload.get("created_at"),
+            "name": contact.get("contact_name") or None,
+            "email": contact.get("contact_email") or None,
+            "consented_future_contact": bool(
+                (payload.get("research_choices") or {}).get("future_contact")
+            ),
+            "app_version": payload.get("app_version"),
+        }
+
+        data = json.dumps(record, ensure_ascii=False, default=str).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data,
+            method="POST",
+            headers={
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "apikey": key,
+                "Authorization": f"Bearer {key}",
+                "Prefer": "return=minimal",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            ok = resp.status in (200, 201)
+            if ok:
+                _set_supabase_contact_diag(None, None)
+            else:
+                _set_supabase_contact_diag(
+                    f"Supabase contact insert failed (HTTP {resp.status}).",
+                    None,
+                )
+            return ok
+    except urllib.error.HTTPError as e:
+        body_text = ""
+        try:
+            body_bytes = e.read()
+            body_text = body_bytes.decode("utf-8", errors="replace") if body_bytes else ""
+        except Exception:
+            body_text = ""
+
+        detail = body_text.strip() if body_text.strip() else "(empty response body)"
+        _set_supabase_contact_diag(
+            f"Supabase contact insert failed: HTTP {e.code} {e.reason}. Response: {detail}",
+            None,
+        )
+        return False
+    except Exception as e:
+        import traceback
+
+        _set_supabase_contact_diag(
+            f"Supabase contact insert failed: {e}",
+            traceback.format_exc(),
+        )
+        return False
+
+
+def persist_contact(payload: Dict[str, Any]) -> None:
+    """Persist contact details if the participant separately agrees to future contact."""
+    if STORAGE_MODE != "supabase":
+        st.session_state["supabase_contact_insert_ok"] = None
+        _set_supabase_contact_diag(None, None)
+        return
+
+    contact = payload.get("contact_details") or {}
+    wants = bool((payload.get("research_choices") or {}).get("future_contact"))
+    email = str(contact.get("contact_email") or "").strip()
+
+    if wants and email:
+        st.session_state["supabase_contact_insert_ok"] = _supabase_insert_contact(payload)
+    else:
+        st.session_state["supabase_contact_insert_ok"] = None
+        _set_supabase_contact_diag(None, None)
+
+
 def build_export(
     result: ScoreResult,
     answers: Dict[str, Any],
     dog_demo: Dict,
+    contact: Dict,
     choices: Dict,
 ) -> Dict[str, Any]:
     # Keys that belong to general health (excluded from behavior_answers)
@@ -613,6 +758,7 @@ def build_export(
         },
         "research_choices": choices,
         "dog_demographics": dog_demo,
+        "contact_details": contact,
     }
 
 
@@ -628,8 +774,10 @@ def init_state() -> None:
         "answers": {},
         "score_result": None,
         "dog_demo": {},
+        "contact": {},
         "choices": {
             "share_questionnaire_data": False,
+            "future_contact": False,
         },
         "export_blob": None,
         "saved_path": None,
@@ -642,6 +790,9 @@ def init_state() -> None:
         "supabase_error": None,
         "supabase_traceback": None,
         "supabase_insert_ok": None,
+        "supabase_contact_error": None,
+        "supabase_contact_traceback": None,
+        "supabase_contact_insert_ok": None,
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -698,14 +849,20 @@ def render_supabase_diagnostics() -> None:
     """Render stored Supabase diagnostics (if any) on stable screens."""
     err = st.session_state.get("supabase_error")
     tb = st.session_state.get("supabase_traceback")
+    c_err = st.session_state.get("supabase_contact_error")
+    c_tb = st.session_state.get("supabase_contact_traceback")
 
-    if err or tb:
+    if err or tb or c_err or c_tb:
         st.markdown("---")
         st.markdown("### Диагностика Supabase")
         if err:
             st.error(err)
         if tb:
             st.code(tb)
+        if c_err:
+            st.error(c_err)
+        if c_tb:
+            st.code(c_tb)
 
 
 # ─────────────────────────────────────────────
@@ -1129,7 +1286,7 @@ def screen_result() -> None:
         if choices.get("share_questionnaire_data"):
             go("demographics")
         else:
-            go("sharing")
+            go("contact")
     if col_next.button("Продолжить ->", type="primary", key="result_next"):
         go("completion")
 
@@ -1171,10 +1328,7 @@ def screen_sharing() -> None:
         go("general_health")
     if cont:
         st.session_state["choices"]["share_questionnaire_data"] = share_q
-        if share_q:
-            go("demographics")
-        else:
-            _wrap_up()
+        go("contact")
 
 
 def screen_demographics() -> None:
@@ -1233,7 +1387,7 @@ def screen_demographics() -> None:
         finish = col_finish.form_submit_button("Продолжить ->", type="primary")
 
     if back:
-        go("sharing")
+        go("contact")
     if finish:
         st.session_state["dog_demo"] = dog_demo
         st.session_state["choices"] = choices
@@ -1248,6 +1402,7 @@ def _wrap_up() -> None:
         result,
         st.session_state["answers"],
         st.session_state["dog_demo"],
+        st.session_state["contact"],
         choices,
     )
     st.session_state["export_blob"] = blob
@@ -1255,20 +1410,102 @@ def _wrap_up() -> None:
         saved = persist_session(blob)
         st.session_state["saved_path"] = str(saved) if saved else None
 
+    persist_contact(blob)
     go("result")
+
+
+def screen_contact() -> None:
+    contact = st.session_state.get("contact", {}) or {}
+    choices = st.session_state["choices"]
+
+    st.markdown(f"## {c('future_contact_title', 'Хотите ли вы принять участие в наших будущих исследованиях?')}")
+    st.markdown(
+        c(
+            "future_contact_body",
+            "Если вы выберете «да», мы попросим ваши контактные данные и будем использовать их только для сообщений о будущих исследованиях.",
+        )
+    )
+
+    contact_options = ["Нет", "Да"]
+    current_contact = contact.get("future_contact", "Нет")
+    if current_contact == "No":
+        current_contact = "Нет"
+    elif current_contact == "Yes":
+        current_contact = "Да"
+    wants_contact = st.radio(
+        "Выберите один вариант:",
+        options=contact_options,
+        index=contact_options.index(current_contact)
+        if current_contact in contact_options
+        else 0,
+        horizontal=True,
+        key="contact_radio",
+    )
+
+    name_val = contact.get("contact_name", "")
+    email_val = contact.get("contact_email", "")
+    if wants_contact == "Да":
+        st.markdown("---")
+        name_val = st.text_input(
+            c("future_contact_name_label", "Ваше имя"),
+            value=contact.get("contact_name", ""),
+            key="contact_name_inp",
+        )
+        email_val = st.text_input(
+            c("future_contact_email_label", "Ваш адрес электронной почты"),
+            value=contact.get("contact_email", ""),
+            key="contact_email_inp",
+        )
+
+    st.markdown("")
+    col_back, col_next = st.columns([1, 2])
+    back = col_back.button("<- Назад", key="contact_back")
+    nxt = col_next.button("Продолжить ->", type="primary", key="contact_next")
+
+    if back:
+        go("sharing")
+    if nxt:
+        if wants_contact == "Да":
+            if not str(email_val or "").strip():
+                st.error("Пожалуйста, укажите адрес электронной почты для будущей связи.")
+                st.stop()
+            if not _is_valid_email_simple(email_val):
+                st.error("Пожалуйста, укажите корректный email-адрес (например, test@example.com).")
+                st.stop()
+        choices["future_contact"] = wants_contact == "Да"
+        contact["future_contact"] = wants_contact
+        contact["contact_name"] = name_val
+        contact["contact_email"] = email_val
+        st.session_state["contact"] = contact
+        st.session_state["choices"] = choices
+        if choices.get("share_questionnaire_data"):
+            go("demographics")
+        else:
+            _wrap_up()
 
 
 def screen_completion() -> None:
     choices = st.session_state["choices"]
-    saved_path = st.session_state.get("saved_path")
-    export_blob = st.session_state.get("export_blob")
     saved_data = choices.get("share_questionnaire_data")
+    wants_contact = bool(
+        choices.get("future_contact")
+        and str((st.session_state.get("contact") or {}).get("contact_email") or "").strip()
+    )
+    contact_saved = st.session_state.get("supabase_contact_insert_ok") is True
 
     st.markdown("## 🐾 Спасибо!")
 
-    if saved_data:
+    if saved_data and contact_saved:
+        st.success(c("completion_research_and_contact"))
+    elif saved_data:
         st.success(
             c("completion_research_saved")
+        )
+    elif contact_saved and wants_contact:
+        st.success(
+            "Спасибо за заполнение опросника. Ваши контактные данные были сохранены "
+            "отдельно для сообщений о будущих исследованиях. Анкетные данные для "
+            "исследования не сохранялись."
         )
     else:
         st.info(
@@ -1292,6 +1529,7 @@ PAGES = {
     "general_health": screen_general_health,
     "gh_duration": screen_gh_duration,
     "sharing": screen_sharing,
+    "contact": screen_contact,
     "demographics": screen_demographics,
     "result": screen_result,
     "completion": screen_completion,
