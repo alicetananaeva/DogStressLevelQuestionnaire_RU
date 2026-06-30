@@ -854,15 +854,22 @@ def render_supabase_diagnostics() -> None:
 
     if err or tb or c_err or c_tb:
         st.markdown("---")
-        st.markdown("### Диагностика Supabase")
-        if err:
-            st.error(err)
-        if tb:
-            st.code(tb)
-        if c_err:
-            st.error(c_err)
-        if c_tb:
-            st.code(c_tb)
+        st.warning(
+            "Результат рассчитан и показан, но сейчас не удалось сохранить данные "
+            "для исследования. Вы можете сделать скриншот результата или пройти "
+            "опросник позже."
+        )
+        show_debug = bool(st.secrets.get("app", {}).get("show_debug", False))
+        if show_debug:
+            st.markdown("### Диагностика Supabase")
+            if err:
+                st.error(err)
+            if tb:
+                st.code(tb)
+            if c_err:
+                st.error(c_err)
+            if c_tb:
+                st.code(c_tb)
 
 
 # ─────────────────────────────────────────────
