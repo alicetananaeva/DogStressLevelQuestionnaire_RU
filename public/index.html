@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Опросник уровня хронического стресса у собак.">
+  <title>Dog Stress Level Questionnaire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="/" aria-label="На главную"><span class="brand-mark" aria-hidden="true">D</span><span>Dog Stress Level Questionnaire</span></a><span class="research-label">Научно обоснованный скрининговый инструмент</span></header>
+  <main id="app">
+    <section id="intro-screen" class="screen hero" tabindex="-1">
+      <h1>Dog Stress Level Questionnaire</h1>
+      <p class="lead">Вам будут предложены вопросы, касающиеся разных поведенческих особенностей вашей собаки. Пожалуйста, отвечайте как можно честнее и точнее. Здесь нет «правильных» или «неправильных» ответов. Ваш результат будет показан только вам. В конце мы отдельно спросим, хотите ли вы поделиться ответами для исследовательских целей.</p>
+      <p><strong>Обычно заполнение занимает около 10-15 минут.</strong></p>
+      <p><strong>Если у вас живет несколько собак, пожалуйста, заполняйте тест на каждую собаку отдельно.</strong></p>
+      <div class="notice"><strong>Важно:</strong> в поведенческих вопросах выбирайте «Да», даже если вы наблюдаете поведение только иногда. Если вы выберете «Да», обычно появятся дополнительные вопросы о частоте и длительности.</div>
+      <button id="start-button" class="button primary">Начать опросник →</button>
+    </section>
+    <section id="sex-screen" class="screen narrow hidden" tabindex="-1">
+      <div class="eyebrow">Перед началом</div><h1>Пол вашей собаки?</h1><p>Это поможет показать только подходящие вопросы.</p>
+      <fieldset id="sex-options" class="choice-list"><legend class="sr-only">Пол собаки</legend><label><input type="radio" name="dog-sex" value="Мужской"><span>Мужской</span></label><label><input type="radio" name="dog-sex" value="Женский"><span>Женский</span></label><label><input type="radio" name="dog-sex" value="Не знаю / предпочитаю не отвечать"><span>Не знаю / предпочитаю не отвечать</span></label></fieldset>
+      <p id="sex-error" class="error hidden" role="alert">Пожалуйста, выберите один вариант.</p><button id="sex-next" class="button primary">Продолжить →</button>
+    </section>
+    <section id="behavior-screen" class="screen hidden" tabindex="-1">
+      <div class="progress-meta"><span id="behavior-progress-copy"></span><span id="behavior-answered-copy"></span></div><div class="progress-track"><div id="behavior-progress-bar"></div></div>
+      <form id="behavior-form" class="question-card"><div id="behavior-code" class="eyebrow"></div><h2 id="behavior-question"></h2><fieldset id="behavior-main" class="binary-options"><legend class="sr-only">Выберите Да или Нет</legend></fieldset><div id="behavior-followups" class="followups hidden"></div><p id="behavior-error" class="error hidden" role="alert">Пожалуйста, выберите ответ, прежде чем продолжить.</p><div class="button-row"><button id="behavior-back" type="button" class="button secondary">← Назад</button><button class="button primary" type="submit">Продолжить →</button></div></form>
+    </section>
+    <section id="health-screen" class="screen hidden" tabindex="-1">
+      <div class="progress-meta"><span id="health-progress-copy"></span><span>Общее здоровье</span></div><div class="progress-track"><div id="health-progress-bar"></div></div>
+      <form id="health-form" class="question-card"><div class="eyebrow">Замечали ли вы у вашей собаки в последнее время следующие перемены?</div><h2 id="health-question"></h2><fieldset id="health-main" class="binary-options"><legend class="sr-only">Выберите Да или Нет</legend></fieldset><div id="health-followup" class="followups hidden"></div><p id="health-error" class="error hidden" role="alert">Пожалуйста, заполните этот вопрос.</p><div class="button-row"><button id="health-back" type="button" class="button secondary">← Назад</button><button class="button primary" type="submit">Продолжить →</button></div></form>
+    </section>
+    <section id="consent-screen" class="screen narrow hidden" tabindex="-1">
+      <div class="eyebrow">Добровольный вклад в исследование</div><h1>Готовы ли вы поделиться ответами для исследования?</h1><p>Вы не обязаны делиться ответами, чтобы получить результат. Если вы решите поделиться данными, выбранная вами информация будет безопасно храниться и использоваться для будущих исследований благополучия, поведения собак и взаимодействия человека и животных.</p>
+      <div class="privacy-card"><h2>Согласие на использование данных в исследовании</h2><p>Вы не обязаны делиться ответами или информацией о собаке, чтобы получить результат. Если вы решите поделиться данными, выбранная вами информация будет безопасно храниться и использоваться для будущих исследований благополучия, поведения собак и взаимодействия человека и животных. Во всех публикациях результаты будут представлены только в обобщенном или обезличенном виде. Вы можете пропустить любые вопросы, на которые не хотите отвечать.</p></div>
+      <fieldset id="consent-options" class="choice-list"><legend class="sr-only">Согласие на передачу данных</legend><label><input type="radio" name="consent" value="yes"><span><strong>Я согласен/согласна поделиться моими ответами на опросник и информацией о моей собаке для будущих исследований благополучия, поведения собак или взаимодействия человека и животных.</strong></span></label><label><input type="radio" name="consent" value="no"><span><strong>Нет, я не хочу делиться данными.</strong></span></label></fieldset>
+      <p id="consent-error" class="error hidden" role="alert">Пожалуйста, выберите один вариант.</p><div class="button-row"><button id="consent-back" class="button secondary">← Назад</button><button id="consent-next" class="button primary">Продолжить →</button></div>
+    </section>
+    <section id="demographics-screen" class="screen narrow hidden" tabindex="-1">
+      <div class="eyebrow">Необязательная информация о собаке</div><h1>Информация о собаке</h1><p>Все поля на этой странице необязательны. Оставьте пустым любой вопрос, на который не хотите отвечать.</p>
+      <form id="demographics-form" class="form-card">
+        <div class="field"><label for="dog-name">Как зовут вашу собаку?</label><input id="dog-name" name="dog_name" autocomplete="off"></div>
+        <div class="field-row"><div class="field"><label for="dog-age-years">Возраст: полных лет</label><input id="dog-age-years" name="dog_age_years" type="number" min="0" max="40"></div><div class="field"><label for="dog-age-months">Дополнительных месяцев</label><input id="dog-age-months" name="dog_age_months" type="number" min="0" max="11"></div></div>
+        <div class="field"><label for="dog-lives">Как долго эта собака живет с вами?</label><select id="dog-lives" name="dog_lives_with_you"><option value="">Предпочитаю не отвечать</option><option>До одного месяца</option><option>До 6 месяцев</option><option>До одного года</option><option>Больше одного года</option></select></div>
+        <div class="field"><label for="dog-neuter">Собака кастрирована/стерилизована?</label><select id="dog-neuter" name="dog_neuter_status"><option value="">Предпочитаю не отвечать</option><option>Да</option><option>Нет</option><option>Не уверена/не уверен</option></select></div>
+        <div class="field"><label for="dog-breed">Какая порода вашей собаки?</label><input id="dog-breed" name="dog_breed" placeholder="Если порода неизвестна, напишите «метис»"></div>
+        <div class="field"><label for="dog-weight">Какой примерный вес вашей собаки?</label><select id="dog-weight" name="dog_weight"><option value="">Предпочитаю не отвечать</option><option>До 5 кг</option><option>5-9 кг</option><option>9-20 кг</option><option>20-30 кг</option><option>30-40 кг</option><option>40-50 кг</option><option>Больше 50 кг</option><option>Я не знаю</option></select></div>
+        <div class="field"><label for="dogs-household">Сколько собак живет в вашем доме, включая эту собаку?</label><input id="dogs-household" name="dogs_in_household" type="number" min="0" max="100"></div>
+        <div class="field"><label for="other-animals">Другие животные в доме</label><input id="other-animals" name="other_animals_text" placeholder="Необязательно: перечислите виды"></div>
+        <div class="button-row"><button id="demographics-back" type="button" class="button secondary">← Назад</button><button class="button primary" type="submit">Показать результат →</button></div>
+      </form>
+    </section>
+    <section id="result-screen" class="screen hidden" tabindex="-1">
+      <div class="result-layout"><div class="score-panel"><div class="eyebrow">Результат скрининга хронического стресса</div><div id="score-number" class="score-number"></div><span id="band-badge" class="band-badge"></span><p>Относительно текущей референсной выборки (n = 149 уникальных собак).</p></div><div class="meaning-panel"><h1>Что это значит?</h1><p id="band-copy"></p></div></div>
+      <div id="save-status" class="status hidden" role="status"></div>
+      <article class="scale-card"><div class="scale-title"><strong>Шкала уровня стресса</strong><span id="scale-value"></span></div><div class="stress-scale"><div class="zone normal"></div><div class="zone elevated"></div><div class="zone high"></div><span id="scale-marker" class="scale-marker" aria-hidden="true">●</span></div><div class="scale-labels"><span>Норма</span><span>Повышенный</span><span>Высокий</span></div></article>
+      <article id="health-result" class="health-card hidden"><h2>Признаки, связанные со здоровьем</h2><div id="health-copy"></div></article>
+      <p class="disclaimer"><em>Результаты основаны на ваших ответах и не заменяют клиническую диагностику.</em></p>
+      <div class="credit"><p>Dog Stress Level Questionnaire был разработан и валидирован Alisa Tananaeva под руководством Dr. Monique Udell в Human-Animal Interaction Lab, Oregon State University.</p><p><a href="https://dogperspective.com" target="_blank" rel="noopener">Узнать больше или обсудить сотрудничество →</a></p></div>
+      <button id="restart-button" class="button secondary">Начать заново</button>
+    </section>
+  </main>
+  <footer><p>Dog Stress Level Questionnaire · Исследования взаимодействия человека и животных</p><p>Oregon State University</p></footer>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

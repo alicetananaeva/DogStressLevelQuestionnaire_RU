@@ -1,11 +1,19 @@
-.DS_Store
+# Streamlit secrets and local participant data
+.streamlit/secrets.toml
+dslq_sessions/
+
+# Python
 __pycache__/
 *.py[cod]
 .venv/
 venv/
 env/
 
-.streamlit/secrets.toml
-dslq_sessions/
+# Cloudflare / Node
+node_modules/
+.wrangler/
+.dev.vars
 
+# OS and logs
+.DS_Store
 *.log

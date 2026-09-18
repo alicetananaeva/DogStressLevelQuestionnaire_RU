@@ -1,0 +1,17 @@
+name = "dslq-questionnaire-ru"
+main = "src/worker.js"
+compatibility_date = "2026-09-18"
+workers_dev = true
+routes = [{ pattern = "dslq-ru.dogperspective.com", custom_domain = true }]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dslq_research_ru"
+database_id = "4881a8e0-ba22-4506-b9ff-5754b58413be"
+migrations_dir = "migrations"

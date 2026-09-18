@@ -1,0 +1,16 @@
+{
+  "name": "dslq-ru-cloudflare",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "d1:migrate:local": "wrangler d1 migrations apply dslq_research_ru --local",
+    "d1:migrate:remote": "wrangler d1 migrations apply dslq_research_ru --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
