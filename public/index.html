@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <header class="site-header"><a class="brand" href="/" aria-label="На главную"><span class="brand-mark" aria-hidden="true">D</span><span>Dog Stress Level Questionnaire</span></a><span class="research-label">Научно обоснованный скрининговый инструмент</span></header>
+  <header class="site-header"><a class="brand" href="/" aria-label="На главную"><span class="brand-mark" aria-hidden="true">D</span><span>Dog Stress Level Questionnaire</span></a></header>
   <main id="app">
     <section id="intro-screen" class="screen hero" tabindex="-1">
       <h1>Dog Stress Level Questionnaire</h1>
@@ -35,7 +35,7 @@
       <form id="health-form" class="question-card"><div class="eyebrow">Замечали ли вы у вашей собаки в последнее время следующие перемены?</div><h2 id="health-question"></h2><fieldset id="health-main" class="binary-options"><legend class="sr-only">Выберите Да или Нет</legend></fieldset><div id="health-followup" class="followups hidden"></div><p id="health-error" class="error hidden" role="alert">Пожалуйста, заполните этот вопрос.</p><div class="button-row"><button id="health-back" type="button" class="button secondary">← Назад</button><button class="button primary" type="submit">Продолжить →</button></div></form>
     </section>
     <section id="consent-screen" class="screen narrow hidden" tabindex="-1">
-      <div class="eyebrow">Добровольный вклад в исследование</div><h1>Готовы ли вы поделиться ответами для исследования?</h1><p>Вы не обязаны делиться ответами, чтобы получить результат. Если вы решите поделиться данными, выбранная вами информация будет безопасно храниться и использоваться для будущих исследований благополучия, поведения собак и взаимодействия человека и животных.</p>
+      <div class="eyebrow">Добровольный вклад в исследование</div><h1>Готовы ли вы поделиться ответами для исследования?</h1>
       <div class="privacy-card"><h2>Согласие на использование данных в исследовании</h2><p>Вы не обязаны делиться ответами или информацией о собаке, чтобы получить результат. Если вы решите поделиться данными, выбранная вами информация будет безопасно храниться и использоваться для будущих исследований благополучия, поведения собак и взаимодействия человека и животных. Во всех публикациях результаты будут представлены только в обобщенном или обезличенном виде. Вы можете пропустить любые вопросы, на которые не хотите отвечать.</p></div>
       <fieldset id="consent-options" class="choice-list"><legend class="sr-only">Согласие на передачу данных</legend><label><input type="radio" name="consent" value="yes"><span><strong>Я согласен/согласна поделиться моими ответами на опросник и информацией о моей собаке для будущих исследований благополучия, поведения собак или взаимодействия человека и животных.</strong></span></label><label><input type="radio" name="consent" value="no"><span><strong>Нет, я не хочу делиться данными.</strong></span></label></fieldset>
       <p id="consent-error" class="error hidden" role="alert">Пожалуйста, выберите один вариант.</p><div class="button-row"><button id="consent-back" class="button secondary">← Назад</button><button id="consent-next" class="button primary">Продолжить →</button></div>
@@ -55,16 +55,16 @@
       </form>
     </section>
     <section id="result-screen" class="screen hidden" tabindex="-1">
-      <div class="result-layout"><div class="score-panel"><div class="eyebrow">Результат скрининга хронического стресса</div><div id="score-number" class="score-number"></div><span id="band-badge" class="band-badge"></span><p>Относительно текущей референсной выборки (n = 149 уникальных собак).</p></div><div class="meaning-panel"><h1>Что это значит?</h1><p id="band-copy"></p></div></div>
+      <div class="result-layout"><div class="score-panel"><div class="eyebrow">Результат скрининга хронического стресса</div><div id="score-number" class="score-number"></div><span id="band-badge" class="band-badge"></span></div><div class="meaning-panel"><h1>Что это значит?</h1><p id="band-copy"></p></div></div>
       <div id="save-status" class="status hidden" role="status"></div>
       <article class="scale-card"><div class="scale-title"><strong>Шкала уровня стресса</strong><span id="scale-value"></span></div><div class="stress-scale"><div class="zone normal"></div><div class="zone elevated"></div><div class="zone high"></div><span id="scale-marker" class="scale-marker" aria-hidden="true">●</span></div><div class="scale-labels"><span>Норма</span><span>Повышенный</span><span>Высокий</span></div></article>
       <article id="health-result" class="health-card hidden"><h2>Признаки, связанные со здоровьем</h2><div id="health-copy"></div></article>
       <p class="disclaimer"><em>Результаты основаны на ваших ответах и не заменяют клиническую диагностику.</em></p>
-      <div class="credit"><p>Dog Stress Level Questionnaire был разработан и валидирован Alisa Tananaeva под руководством Dr. Monique Udell в Human-Animal Interaction Lab, Oregon State University.</p><p><a href="https://dogperspective.com" target="_blank" rel="noopener">Узнать больше или обсудить сотрудничество →</a></p></div>
+      <div class="credit"><p>Dog Stress Level Questionnaire был разработан и валидирован Alisa Tananaeva под руководством Dr. Monique Udell в <a href="https://thehumananimalbond.com/" target="_blank" rel="noopener">Human–Animal Interaction Lab</a>, Oregon State University.</p><p><a href="https://dogperspective.com" target="_blank" rel="noopener">Узнать больше или обсудить сотрудничество →</a></p></div>
       <button id="restart-button" class="button secondary">Начать заново</button>
     </section>
   </main>
-  <footer><p>Dog Stress Level Questionnaire · Исследования взаимодействия человека и животных</p><p>Oregon State University</p></footer>
+  <footer><p>Dog Stress Level Questionnaire</p></footer>
   <script type="module" src="/app.js"></script>
 </body>
 </html>
